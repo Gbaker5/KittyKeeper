@@ -146,7 +146,7 @@ exports.postSignup = async (req, res, next) => {
       if (err) {
         return next(err);
       }
-      res.redirect("/profile");
+      res.redirect("/createProfile");
     });
 
   } catch (err) {

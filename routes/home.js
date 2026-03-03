@@ -11,12 +11,20 @@ router.post("/signup", authController.postSignup);
 
 
 router.get('/', homeController.getIndex) 
-router.get('/profile', homeController.getProfile)
+router.get('/profile', homeController.getProfile);
+
+router.get('/createProfile', homeController.getCreateProfile);
+
+router.get('/createOwner', homeController.getCreateOwner);
+router.put('/createOwner', homeController.putCreateOwner);
+
+router.get('/createPet', homeController.getCreatePet);
+router.put('/createPet', homeController.putCreatePet);
+
+router.get('/createSitter', homeController.getCreateSitter);
+router.put('/createSitter', homeController.putCreateSitter);
 
 
-router.get('/getPrompt', homeController.getPrompt)
-
-router.post('/postPrompt', homeController.postPrompt)
 
 
 

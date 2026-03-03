@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Create Owner Profile</title>
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body>
+    <h1>Create Owner Profile</h1>
+
+    <!-- Generic flash/error displays -->
+    <% if (typeof messages !== 'undefined' && messages.error && messages.error.length) { %>
+      <div class="flash flash-error">
+        <% messages.error.forEach(function(msg){ %>
+          <p><%= msg %></p>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <% if (typeof errors !== 'undefined' && Object.keys(errors).length) { %>
+      <div class="field-errors">
+        <% Object.keys(errors).forEach(function(field){ %>
+          <p><strong><%= field %>:</strong> <%= errors[field].message || errors[field] %></p>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <form action="/putCreateOwner" method="PUT">
+      <input type="hidden" name="userId" value="<%= typeof user !== 'undefined' ? user._id : '' %>">
+
+      <fieldset>
+        <legend>Location (required)</legend>
+        <label>
+          Longitude (lng):
+          <input type="number" step="any" name="location[coordinates][]" value="<%= (owner.location && owner.location.coordinates && owner.location.coordinates[0]) || '' %>" required>
+        </label>
+        <label>
+          Latitude (lat):
+          <input type="number" step="any" name="location[coordinates][]" value="<%= (owner.location && owner.location.coordinates && owner.location.coordinates[1]) || '' %>" required>
+        </label>
+        <label>
+          City:
+          <input type="text" name="location[city]" value="<%= (owner.location && owner.location.city) || '' %>">
+        </label>
+        <label>
+          State:
+          <input type="text" name="location[state]" value="<%= (owner.location && owner.location.state) || '' %>">
+        </label>
+        <label>
+          ZIP:
+          <input type="text" name="location[zip]" value="<%= (owner.location && owner.location.zip) || '' %>">
+        </label>
+      </fieldset>
+
+      <label>
+        Home type (required):
+        <select name="homeType" required>
+          <option value="">Select...</option>
+          <option value="apartment" <%= owner.homeType==='apartment' ? 'selected' : '' %>>Apartment</option>
+          <option value="house" <%= owner.homeType==='house' ? 'selected' : '' %>>House</option>
+          <option value="townhome" <%= owner.homeType==='townhome' ? 'selected' : '' %>>Townhome</option>
+          <option value="other" <%= owner.homeType==='other' ? 'selected' : '' %>>Other</option>
+        </select>
+      </label>
+
+      <label>
+        <input type="checkbox" id="hasOtherPets" name="hasOtherPets" value="true" <%= owner.hasOtherPets ? 'checked' : '' %>> I have other pets
+      </label>
+
+      <div id="otherPetsWrap" style="display:<%= ((owner && owner.hasOtherPets) ?? false) ? 'block' : 'none' %>">
+        <label>
+          Other pets details (max 500 chars):
+          <textarea name="otherPetsDetails" id="otherPetsDetails" maxlength="500"><%=   owner.otherPetsDetails || '' %></textarea>
+        </label>
+      </div>
+
+      <label>
+        <input type="checkbox" name="providesSupplies" value="true" <%= (typeof owner.providesSupplies==='undefined' || owner.providesSupplies) ? 'checked' : '' %>> I provide supplies
+      </label>
+
+      <fieldset>
+        <legend>Emergency contact</legend>
+        <label>
+          Name:
+          <input type="text" name="emergencyContact[name]" value="<%= (owner.emergencyContact && owner.emergencyContact.name) || '' %>">
+        </label>
+        <label>
+          Phone:
+          <input type="text" name="emergencyContact[phone]" value="<%= (owner.emergencyContact && owner.emergencyContact.phone) || '' %>">
+        </label>
+        <label>
+          Relationship:
+          <input type="text" name="emergencyContact[relationship]" value="<%= (owner.emergencyContact && owner.emergencyContact.relationship) || '' %>">
+        </label>
+      </fieldset>
+
+      <label>
+        Bio (max 1000 chars):
+        <textarea name="bio" maxlength="1000"><%= owner.bio || '' %></textarea>
+      </label>
+
+      <button type="submit">Create Profile</button>
+    </form>
+
+    <div>
+        <a href="/createPet">Add Pet</a>
+    </div>
+
+    <script src="/js/ownerCreate.js"></script>
+  </body>
+</html>

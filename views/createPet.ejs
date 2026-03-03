@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Pet Profile</title>
+</head>
+<body>
+    <h2>Create Pet Profile</h2>
+    <nav>
+        <ul>
+            <li></li>
+        </ul>
+    </nav>
+
+    <div>
+        <form action="/createPet" method="PUT">
+            <% if (typeof messages !== 'undefined' && messages.error && messages.error.length) { %>
+<div class="flash flash-error">
+<% messages.error.forEach(function(m){ %><p><%= m %></p><% }) %>
+</div>
+<% } %>
+
+<% if (typeof errors !== 'undefined' && Object.keys(errors).length) { %>
+<div class="field-errors">
+<% Object.keys(errors).forEach(function(field){ %>
+<p><strong><%= field %>:</strong> <%= errors[field].message || errors[field] %></p>
+<% }) %>
+</div>
+<% } %>
+
+<label> Name (required): <input type="text" name="name" value="<%= (kitty && kitty.name) || '' %>" maxlength="50" required> </label> 
+<label> Age: <input type="number" name="age" min="0" max="30" step="1" value="<%= (kitty && kitty.age) != null ? kitty.age : '' %>"> </label> 
+<label> Sex (required): 
+    <select name="sex" required> 
+    <option value="">Select...</option> 
+    <option value="male" <%= kitty && kitty.sex==='male' ? 'selected' : '' %>>Male</option> 
+    <option value="female" <%= kitty && kitty.sex==='female' ? 'selected' : '' %>>Female</option> 
+    <option value="unknown" <%= kitty && kitty.sex==='unknown' ? 'selected' : '' %>>Unknown</option> 
+    </select> 
+</label> 
+<label> Breed: <input type="text" name="breed" maxlength="100" value="<%= (kitty && kitty.breed) || '' %>"> </label> 
+<label> Color: <input type="text" name="color" maxlength="100" value="<%= (kitty && kitty.color) || '' %>"> </label> 
+<label> Temperament (required): 
+    <select name="temperament" required> 
+    <option value="">Select...</option> 
+    <option value="very_friendly" <%= kitty && kitty.temperament==='very_friendly' ? 'selected' : '' %>>Very friendly</option>
+    <option value="friendly" <%= kitty && kitty.temperament==='friendly' ? 'selected' : '' %>>Friendly</option> 
+    <option value="shy" <%= kitty && kitty.temperament==='shy' ? 'selected' : '' %>>Shy</option> 
+    <option value="very_shy" <%= kitty && kitty.temperament==='very_shy' ? 'selected' : '' %>>Very shy</option> 
+    <option value="independent" <%= kitty && kitty.temperament==='independent' ? 'selected' : '' %>>Independent</option> 
+    <option value="aggressive" <%= kitty && kitty.temperament==='aggressive' ? 'selected' : '' %>>Aggressive</option> 
+    </select> 
+</label> 
+<label> Energy level (required): <select name="energyLevel" required> <option value="">Select...</option> 
+    <option value="low" <%= kitty && kitty.energyLevel==='low' ? 'selected' : '' %>>Low</option> 
+    <option value="medium" <%= kitty && kitty.energyLevel==='medium' ? 'selected' : '' %>>Medium</option> 
+    <option value="high" <%= kitty && kitty.energyLevel==='high' ? 'selected' : '' %>>High</option> </select> </label> 
+<label> Special needs (max 500 chars): <textarea name="specialNeeds" maxlength="500"><%= (kitty && kitty.specialNeeds) || '' %></textarea> </label> 
+<label> Medications (max 500 chars): <textarea name="medications" maxlength="500"><%= (kitty && kitty.medications) || '' %></textarea> </label> 
+<label> Can administer medication: <input type="checkbox" name="canAdministerMedication" value="true" <%= kitty && kitty.canAdministerMedication ? 'checked' : '' %>> </label> 
+<label> Good with other cats: <input type="checkbox" name="goodWithOtherCats" value="true" <%= (kitty && kitty.goodWithOtherCats) ? 'checked' : '' %>> </label> 
+<label> Good with dogs: <input type="checkbox" name="goodWithDogs" value="true" <%= (kitty && kitty.goodWithDogs) ? 'checked' : '' %>> </label> 
+<label> Bite history: <input type="checkbox" name="biteHistory" value="true" <%= (kitty && kitty.biteHistory) ? 'checked' : '' %>> </label> 
+<label> Escape risk: <input type="checkbox" name="escapeRisk" value="true" <%= (kitty && kitty.escapeRisk) ? 'checked' : '' %>> </label> 
+<label> Litter box notes (max 500 chars): <textarea name="litterBoxNotes" maxlength="500"><%= (kitty && kitty.litterBoxNotes) || '' %></textarea> </label> 
+<label> Feeding schedule (max 500 chars): <textarea name="feedingSchedule" maxlength="500"><%= (kitty && kitty.feedingSchedule) || '' %></textarea> </label> 
+<label> Indoor only: <input type="checkbox" name="indoorOnly" value="true" <%= (kitty && kitty.indoorOnly) ? 'checked' : '' %>> </label> 
+<div> <strong>Existing photos:</strong> 
+    <% if (kitty && kitty.photos && kitty.photos.length) 
+        { %> <ul> <% kitty.photos.forEach(function(p, i){ %> 
+            <li> 
+                <% if (p.url) { %> 
+                <img src="<%= p.url %>" alt="photo-<%= i %>" style="max-width:120px"><br> 
+                <% } %> 
+                <input type="text" name="photos[<%= i %>][url]" value="<%= p.url || '' %>" placeholder="photo URL">\n <input type="hidden" name="photos[<%= i %>][publicId]" value="<%= p.publicId || '' %>"> 
+                
+            </li> <% }) %> 
+            </ul> 
+                 
+    <% } else { %> <p>No photos</p> <% } %> 
+        <p>Add photo URL: <input type="text" name="newPhotoUrl" placeholder="https://..."></p> 
+</div> 
+
+<label> Active: <input type="checkbox" name="isActive" value="true" <%= (kitty && kitty.isActive) ? 'checked' : '' %>> </label>
+
+
+
+<button type="submit">Save</button>
+
+
+        </form>
+    </div>
+
+    <section>
+        <ul>
+            <% for(let k=0;k < kitty.length;k++){ %>
+           <li>
+            <%= kitty[k].name %>
+                <form action="/deletePet" method="POST" style="display:inline">
+                    <input type="hidden" name="catId" value="<%= kitty[k]._id %>">
+                    <button type="submit">Delete</button>
+                </form>
+                <a href="/editPet/<%= kitty[k]._id %>">Edit</a>
+            
+            </li>
+
+        
+            <% } %>
+        </ul>
+       
+    </section>
+    
+</body>
+</html>

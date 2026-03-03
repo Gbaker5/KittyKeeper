@@ -6,6 +6,7 @@ const passport = require("passport");
 const connectDB = require('./config/database')
 const MongoStore = require("connect-mongo");
 const mongoose = require("mongoose");
+const morgan = require('morgan')
 
 const homeRoutes = require('./routes/home')
 //const todoRoutes = require('./routes/todos')
@@ -43,6 +44,7 @@ app.use(passport.session());
 //Use flash messages for errors, info, ect...
 app.use(flash());
 
+app.use(morgan('dev'))
 
 app.use('/', homeRoutes)
 //app.use('/todos', todoRoutes)
